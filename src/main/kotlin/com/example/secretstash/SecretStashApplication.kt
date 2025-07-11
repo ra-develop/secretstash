@@ -9,3 +9,4 @@ class SecretStashApplication
 fun main(args: Array<String>) {
 	runApplication<SecretStashApplication>(*args)
 }
+
