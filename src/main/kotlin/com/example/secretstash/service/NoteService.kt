@@ -3,7 +3,6 @@ package com.example.secretstash.service
 import com.example.secretstash.dto.NoteDto
 import com.example.secretstash.exception.NotFoundException
 import com.example.secretstash.model.Note
-import com.example.secretstash.model.User
 import com.example.secretstash.repository.NoteRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl

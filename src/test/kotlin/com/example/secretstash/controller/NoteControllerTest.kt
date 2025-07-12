@@ -55,7 +55,7 @@ class NoteControllerTest {
         val noteDto = NoteDto(1, "Test", "Content", Instant.now().epochSecond, Instant.now().epochSecond, null)
         val page = PageImpl(listOf(noteDto))
 
-        `when`(noteService.getNotes(any(), any())).thenReturn(page)
+        `when`(noteService.getNotes(1)).thenReturn(page)
 
         mockMvc.perform(get("/api/notes"))
             .andExpect(status().isOk)

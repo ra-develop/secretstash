@@ -91,7 +91,7 @@ class NoteServiceTest {
         )).thenReturn(PageImpl(activeNotes, pageable, 1))
 
         // When
-        val result = noteService.getNotes(1L, pageable)
+        val result = noteService.getNotes(1L)
 
         // Then
         assertEquals(1, result.totalElements)
