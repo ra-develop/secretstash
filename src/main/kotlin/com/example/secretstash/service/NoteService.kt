@@ -42,7 +42,7 @@ class NoteService(
     fun getLatestNotes(userId: Long): List<NoteDto> {
         return noteRepository
             .findFirst1000ByUserIdOrderByCreatedAtDesc(userId)
-            .filter { it.expiresAt == null || it.expiresAt.isAfter(Instant.now()) }
+            .filter { it.expiresAt != null || it.expiresAt?.isAfter(Instant.now()) == true }
             .map { it.toDto() }
     }
 

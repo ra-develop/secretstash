@@ -8,6 +8,7 @@ import com.example.secretstash.security.JwtTokenProvider
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.AuthenticationException
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,15 +27,22 @@ class AuthService(
     }
 
     fun login(authRequest: AuthRequest): AuthResponse {
-        val authentication: Authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(
+
+        try {
+            val authenticationToken = UsernamePasswordAuthenticationToken(
                 authRequest.email,
                 authRequest.password
             )
-        )
+            val authentication = authenticationManager.authenticate(
+                authenticationToken
+            )
 
-        val userPrincipal = authentication.principal as UserPrincipal
-        val token = jwtTokenProvider.generateToken(authentication)
-        return AuthResponse(token)
+            val principal = authentication.principal as UserPrincipal
+            val token = jwtTokenProvider.generateToken(authentication)
+
+            return AuthResponse(token)
+        } catch (e: AuthenticationException) {
+            throw BadRequestException("Invalid email/password")
+        }
     }
 }

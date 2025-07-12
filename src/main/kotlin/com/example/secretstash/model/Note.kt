@@ -9,10 +9,10 @@ data class Note(
     val id: Long = 0,
 
     @Column(nullable = false)
-    val title: String,
+    var title: String,
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    val content: String,
+    var content: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -22,7 +22,7 @@ data class Note(
     val createdAt: Instant = Instant.now(),
 
     @Column(nullable = false)
-    val updatedAt: Instant = Instant.now(),
+    var updatedAt: Instant = Instant.now(),
 
-    val expiresAt: Instant? = null
+    var expiresAt: Instant? = null
 )

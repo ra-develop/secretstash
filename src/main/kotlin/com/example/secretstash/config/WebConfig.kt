@@ -13,12 +13,12 @@ class WebConfig {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
-                    .allowedOrigins("*") // Allow all origins (adjust for production)
+                    .allowedOriginPatterns("*")  // Note the different method name
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowedHeaders("*")
-                    .exposedHeaders("Authorization") // Expose Authorization header
+                    .exposedHeaders("Authorization")
                     .allowCredentials(true)
-                    .maxAge(3600) // 1 hour
+                    .maxAge(3600)
             }
         }
     }

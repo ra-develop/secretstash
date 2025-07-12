@@ -1,6 +1,5 @@
 package com.example.secretstash.security
 
-import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
@@ -10,8 +9,11 @@ import java.util.*
 
 @Component
 class JwtTokenProvider(
-    @Value("\${app.jwt.secret}") private val jwtSecret: String,
-    @Value("\${app.jwt.expiration-in-ms}") private val jwtExpirationInMs: Long
+    @Value("\${app.jwt.secret}")
+    private val jwtSecret: String,
+
+    @Value("\${app.jwt.expiration-in-ms}")
+    private val jwtExpirationInMs: Long  // Changed to Long
 ) {
     fun generateToken(authentication: Authentication): String {
         val userPrincipal = authentication.principal as UserPrincipal
@@ -27,7 +29,7 @@ class JwtTokenProvider(
     }
 
     fun getUserIdFromToken(token: String): Long {
-        val claims: Claims = Jwts.parser()
+        val claims = Jwts.parser()
             .setSigningKey(jwtSecret)
             .parseClaimsJws(token)
             .body

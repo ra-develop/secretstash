@@ -1,10 +1,11 @@
 package com.example.secretstash.security
 
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.web.filter.OncePerRequestFilter
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 class JwtTokenFilter(
     private val jwtTokenProvider: JwtTokenProvider
@@ -19,7 +20,15 @@ class JwtTokenFilter(
             val jwt = getJwtFromRequest(request)
             if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
                 val userId = jwtTokenProvider.getUserIdFromToken(jwt)
-                val authentication = UserPrincipal(userId, null, emptyList())
+
+                // Create proper Authentication object
+                val userPrincipal = UserPrincipal(userId, null, emptyList())
+                val authentication = UsernamePasswordAuthenticationToken(
+                    userPrincipal,
+                    null,
+                    userPrincipal.authorities
+                )
+
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (ex: Exception) {
