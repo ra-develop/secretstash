@@ -22,7 +22,7 @@ class JwtTokenFilter(
                 val userId = jwtTokenProvider.getUserIdFromToken(jwt)
 
                 // Create proper Authentication object
-                val userPrincipal = UserPrincipal(userId, null, emptyList())
+                val userPrincipal = UserPrincipal(userId, null, null,emptyList())
                 val authentication = UsernamePasswordAuthenticationToken(
                     userPrincipal,
                     null,

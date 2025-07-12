@@ -23,6 +23,7 @@ class CustomUserDetailsService(
         return UserPrincipal(
             user.get().id,
             user.get().email,
+            user.get().password,
             emptyList(),
              // Add authorities/roles if needed
         )

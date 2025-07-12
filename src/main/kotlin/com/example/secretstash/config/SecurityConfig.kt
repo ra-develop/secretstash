@@ -51,6 +51,7 @@ class SecurityConfig(
     @Bean
     fun authenticationManager(http: HttpSecurity): AuthenticationManager {
         val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
+
         authenticationManagerBuilder
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder())
