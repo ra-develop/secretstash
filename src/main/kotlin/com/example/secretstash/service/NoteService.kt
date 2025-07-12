@@ -6,6 +6,8 @@ import com.example.secretstash.model.Note
 import com.example.secretstash.model.User
 import com.example.secretstash.repository.NoteRepository
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -28,8 +30,25 @@ class NoteService(
         return savedNote.toDto()
     }
 
-    fun getNotes(userId: Long, pageable: Pageable): Page<NoteDto> {
-        val currentTime = Instant.now()
+    fun getNotes(userId: Long): Page<NoteDto> {
+
+        val allNotes = noteRepository.findFirst1000ByUserIdOrderByCreatedAtDesc(userId)
+
+        val pageNumber = 0 // Second page (0-indexed)
+        val pageSize = allNotes.size
+        val pageable: Pageable = PageRequest.of(pageNumber, pageSize)
+
+        val start = pageable.offset.toInt()
+        val end = (start + pageable.pageSize).coerceAtMost(allNotes.size)
+        val subList = if (start >= end) emptyList() else allNotes.subList(start, end)
+
+        val itemPage: Page<Note> = PageImpl(subList, pageable, allNotes.size.toLong())
+
+        return itemPage.map { it.toDto() }
+    }
+
+    fun getNotesPageable(userId: Long, pageable: Pageable): Page<NoteDto> {
+        val currentTime = Instant.ofEpochSecond(0) // .now()
         return noteRepository
             .findByUserIdAndExpiresAtAfterOrExpiresAtIsNull(
                 userId,

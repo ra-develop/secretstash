@@ -22,13 +22,19 @@ class NoteController(
     @GetMapping
     fun getNotes(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int
+        @RequestParam() page: Int?,
+        @RequestParam() size: Int?
+//        @RequestParam(defaultValue = "0") page: Int,
+//        @RequestParam(defaultValue = "10") size: Int
     ): Page<NoteDto> {
-        return noteService.getNotes(
-            userPrincipal.id,
-            PageRequest.of(page, size, Sort.by("createdAt").descending())
-        )
+        if (page == null || size == null) {
+            return noteService.getNotes(userPrincipal.id)
+        } else {
+            return noteService.getNotesPageable(
+                userPrincipal.id,
+                PageRequest.of(page, size, Sort.by("createdAt").descending())
+            )
+        }
     }
 
     @GetMapping("/latest")
